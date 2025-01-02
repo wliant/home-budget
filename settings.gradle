@@ -1,0 +1,5 @@
+rootProject.name = 'home-budget'
+
+include 'web'
+include 'addon-app'
+include 'dev-infra'

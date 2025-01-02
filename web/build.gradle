@@ -1,0 +1,26 @@
+plugins {
+    id 'org.openapi.generator' version '7.10.0'
+    id 'com.github.node-gradle.node' version '7.1.0'
+}
+
+openApiGenerate {
+    generatorName = "typescript-axios"
+    inputSpec = "$rootDir/addon-app/build/generated/openapi/openapi.json"
+    outputDir = "$rootDir/web/src/generated"
+    configOptions = [
+            apiPackage: 'api',
+            modelPackage: 'model',
+            supportsES6: 'true',
+            axiosVersion: '^1.7.9',
+            withSeparateModelsAndApi: 'true',
+            reactNative: 'false',
+            npmVersion: '9.5.1',
+            disallowAdditionalPropertiesIfNotPresent: 'true',
+            withInterfaces: 'true'
+    ]
+}
+
+
+tasks.named('openApiGenerate') {
+    dependsOn ':addon-app:generateOpenApiDocs'
+}
