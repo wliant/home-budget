@@ -1,46 +1,80 @@
-import {useEffect, useState} from 'react'
-import reactLogo from './assets/react.svg'
-import {useAxios} from './contexts/AxiosProvider'
-import viteLogo from '/vite.svg'
-import './App.css'
-import {BudgetEntityControllerApi} from "./generated";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+
+// Layout
+import Layout from './components/Layout';
+
+// Pages
+import Dashboard from './pages/Dashboard';
+import Expenses from './pages/Expenses';
+import Budgets from './pages/Budgets';
+import Categories from './pages/Categories';
+import Reports from './pages/Reports';
+import Settings from './pages/Settings';
+
+// Context
+import { AuthProvider } from './contexts/AuthContext';
+import { NotificationProvider } from './contexts/NotificationContext';
+import { AxiosProvider } from './contexts/AxiosProvider';
+
+const theme = createTheme({
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#2563eb',
+    },
+    secondary: {
+      main: '#7c3aed',
+    },
+    success: {
+      main: '#10b981',
+    },
+    error: {
+      main: '#ef4444',
+    },
+    warning: {
+      main: '#f59e0b',
+    },
+  },
+  typography: {
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+  },
+  shape: {
+    borderRadius: 8,
+  },
+});
 
 function App() {
-    const [count, setCount] = useState(0);
-    const axios = useAxios();
-
-    useEffect(() => {
-        if (axios) {
-            axios(BudgetEntityControllerApi).getCollectionResourceBudgetGet1().then((response) => {
-                console.log(response.data);
-            });
-        }
-
-    }, [axios])
-    return (
-        <>
-            <div>
-                <a href="https://vite.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo"/>
-                </a>
-                <a href="https://react.dev" target="_blank">
-                    <img src={reactLogo} className="logo react" alt="React logo"/>
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </>
-    )
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <AxiosProvider>
+          <AuthProvider>
+            <NotificationProvider>
+              <Router>
+                <Layout>
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/expenses" element={<Expenses />} />
+                    <Route path="/budgets" element={<Budgets />} />
+                    <Route path="/categories" element={<Categories />} />
+                    <Route path="/reports" element={<Reports />} />
+                    <Route path="/settings" element={<Settings />} />
+                  </Routes>
+                </Layout>
+              </Router>
+            </NotificationProvider>
+          </AuthProvider>
+        </AxiosProvider>
+      </LocalizationProvider>
+    </ThemeProvider>
+  );
 }
 
-export default App
+export default App;

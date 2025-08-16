@@ -30,7 +30,7 @@ The Home Budget App is a web application designed to help users manage their hom
 
 - Node.js (v14 or higher)
 - npm (v6 or higher)
-- Java (JDK 11 or higher)
+- Java (JDK 17 or higher)
 - Gradle
 
 ### Installation
