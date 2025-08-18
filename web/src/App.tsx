@@ -1,7 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
@@ -20,38 +18,11 @@ import Settings from './pages/Settings';
 import { AuthProvider } from './contexts/AuthContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { AxiosProvider } from './contexts/AxiosProvider';
-
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#2563eb',
-    },
-    secondary: {
-      main: '#7c3aed',
-    },
-    success: {
-      main: '#10b981',
-    },
-    error: {
-      main: '#ef4444',
-    },
-    warning: {
-      main: '#f59e0b',
-    },
-  },
-  typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-  },
-  shape: {
-    borderRadius: 8,
-  },
-});
+import { AppThemeProvider } from './contexts/ThemeContext';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <AppThemeProvider>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <AxiosProvider>
           <AuthProvider>
@@ -73,7 +44,7 @@ function App() {
           </AuthProvider>
         </AxiosProvider>
       </LocalizationProvider>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 }
 
