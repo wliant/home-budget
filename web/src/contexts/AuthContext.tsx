@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axiosInstance';
 
 interface User {
   id: number;
@@ -36,31 +36,44 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in (check localStorage or session)
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    // Check if user is logged in and validate token
+    const validateToken = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const response = await axiosInstance.get('/api/auth/validate', {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setUser(response.data);
+          // Set default axios header for authenticated requests
+          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        } catch (error) {
+          // Token is invalid, clear it
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
+      }
+      setLoading(false);
+    };
+
+    validateToken();
   }, []);
 
   const login = async (username: string, password: string) => {
     try {
-      // For now, we'll use a mock user
-      // In production, this would make an API call to authenticate
-      const mockUser: User = {
-        id: 1,
-        username: username,
-        email: `${username}@example.com`,
-        firstName: 'John',
-        lastName: 'Doe'
-      };
-      
-      setUser(mockUser);
-      localStorage.setItem('user', JSON.stringify(mockUser));
-      
+      const response = await axiosInstance.post('/api/auth/login', {
+        username,
+        password
+      });
+
+      const { token, user: userData } = response.data;
+
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('token', token);
+
       // Set default axios header for authenticated requests
-      axios.defaults.headers.common['Authorization'] = `Bearer mock-token`;
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } catch (error) {
       console.error('Login failed:', error);
       throw error;
@@ -70,22 +83,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
-    delete axios.defaults.headers.common['Authorization'];
+    localStorage.removeItem('token');
+    delete axiosInstance.defaults.headers.common['Authorization'];
   };
 
   const register = async (userData: any) => {
     try {
-      // Mock registration
-      const newUser: User = {
-        id: Date.now(),
-        username: userData.username,
-        email: userData.email,
-        firstName: userData.firstName,
-        lastName: userData.lastName
-      };
-      
+      const response = await axiosInstance.post('/api/auth/register', userData);
+
+      const { token, user: newUser } = response.data;
+
       setUser(newUser);
       localStorage.setItem('user', JSON.stringify(newUser));
+      localStorage.setItem('token', token);
+
+      // Set default axios header for authenticated requests
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
     } catch (error) {
       console.error('Registration failed:', error);
       throw error;

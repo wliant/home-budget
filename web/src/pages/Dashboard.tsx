@@ -59,19 +59,20 @@ import {
 } from 'recharts';
 import { format, startOfMonth, endOfMonth, subMonths } from 'date-fns';
 import axiosInstance from '../api/axiosInstance';
+import { useAuth } from '../contexts/AuthContext';
 
 const Dashboard: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  
+  const { user } = useAuth();
+
   const [loading, setLoading] = useState(true);
   const [expenses, setExpenses] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [budgets, setBudgets] = useState<any[]>([]);
-  
-  // Mock user ID - in real app, get from auth context
-  const userId = 1;
+
+  const userId = user?.id;
 
   const [dashboardData, setDashboardData] = useState({
     totalBudget: 0,

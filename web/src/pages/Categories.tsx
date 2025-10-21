@@ -59,6 +59,7 @@ import {
 import { useApiClients } from '../contexts/AxiosProvider';
 import { useNotification } from '../contexts/NotificationContext';
 import axiosInstance from '../api/axiosInstance';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Category {
   id?: number;
@@ -95,9 +96,9 @@ const Categories: React.FC = () => {
 
   const { categoryEntityApi } = useApiClients();
   const { showNotification } = useNotification();
+  const { user } = useAuth();
 
-  // Mock user ID - in real app, get from auth context
-  const userId = 1;
+  const userId = user?.id;
 
   // Predefined color palette
   const colorPalette = [

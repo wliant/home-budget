@@ -63,6 +63,7 @@ import {
 } from '@mui/icons-material';
 import { useNotification } from '../contexts/NotificationContext';
 import { useTheme as useThemeContext } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 import axiosInstance from '../api/axiosInstance';
 
 interface TabPanelProps {
@@ -132,9 +133,9 @@ const Settings: React.FC = () => {
   const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
   const [paymentMethodDialogOpen, setPaymentMethodDialogOpen] = useState(false);
   const [editingPaymentMethod, setEditingPaymentMethod] = useState<PaymentMethod | null>(null);
-  
-  // Mock user ID - in real app, get from auth context
-  const userId = 1;
+  const { user } = useAuth();
+
+  const userId = user?.id || 1;
 
   // Profile state
   const [profile, setProfile] = useState<UserProfile>({
