@@ -5,7 +5,6 @@ import {
   Paper,
   Container,
   useTheme,
-  useMediaQuery,
   alpha,
   Fade,
   Grow,
@@ -21,7 +20,6 @@ import {
   FormControl,
   InputLabel,
   Chip,
-  Divider,
   LinearProgress,
   Table,
   TableBody,
@@ -32,17 +30,17 @@ import {
 } from '@mui/material';
 import {
   TrendingUp,
-  TrendingDown,
+
   AttachMoney,
-  Category as CategoryIcon,
-  CalendarToday,
+
+
   PieChart,
   BarChart,
   ShowChart,
   Assessment,
   Receipt,
   AccountBalance,
-  ShoppingCart,
+
   LocalAtm,
   CreditCard,
   Savings,
@@ -51,8 +49,8 @@ import {
   Analytics,
 } from '@mui/icons-material';
 import {
-  LineChart,
-  Line,
+
+
   AreaChart,
   Area,
   BarChart as RechartsBarChart,
@@ -72,12 +70,12 @@ import {
   PolarRadiusAxis,
   Radar,
 } from 'recharts';
-import { format, subMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { format } from 'date-fns';
 
-const Reports: React.FC = () => {
+const Reports = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  
+  
   
   const [timeRange, setTimeRange] = useState<'week' | 'month' | 'quarter' | 'year'>('month');
   const [reportType, setReportType] = useState<'overview' | 'expenses' | 'categories' | 'trends'>('overview');
@@ -158,7 +156,7 @@ const Reports: React.FC = () => {
     return null;
   };
 
-  const COLORS = ['#f093fb', '#4facfe', '#667eea', '#fa709a', '#30cfd0'];
+  
 
   return (
     <Container maxWidth="xl" sx={{ py: { xs: 2, md: 4 } }}>
