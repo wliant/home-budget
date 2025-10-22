@@ -132,19 +132,91 @@ public class ExpenseService {
     }
 
     public void processRecurringExpenses() {
-        // This method would be called by a scheduled job to process all recurring expenses
-        // For now, it's a placeholder
+        List<Expense> allRecurringExpenses = expenseRepository.findByIsRecurringTrue();
+        LocalDate today = LocalDate.now();
+
+        for (Expense recurring : allRecurringExpenses) {
+            processRecurringExpense(recurring, today);
+        }
     }
-    
+
     public void processRecurringExpenses(User user) {
         List<Expense> recurringExpenses = getRecurringExpenses(user);
         LocalDate today = LocalDate.now();
-        
+
         for (Expense recurring : recurringExpenses) {
-            if (recurring.getRecurrenceEndDate() == null || !today.isAfter(recurring.getRecurrenceEndDate())) {
-                // Logic to create new expense based on recurrence frequency
-                // This would be called by a scheduled job
-            }
+            processRecurringExpense(recurring, today);
         }
+    }
+
+    private void processRecurringExpense(Expense recurring, LocalDate today) {
+        // Check if recurrence has ended
+        if (recurring.getRecurrenceEndDate() != null && today.isAfter(recurring.getRecurrenceEndDate())) {
+            return;
+        }
+
+        // Determine the next occurrence date
+        LocalDate nextOccurrence = calculateNextOccurrence(recurring, today);
+
+        // Check if we should create a new expense
+        if (nextOccurrence != null && !nextOccurrence.isAfter(today)) {
+            createRecurringExpenseInstance(recurring, nextOccurrence);
+
+            // Update last recurrence date
+            recurring.setLastRecurrenceDate(nextOccurrence);
+            expenseRepository.save(recurring);
+        }
+    }
+
+    private LocalDate calculateNextOccurrence(Expense recurring, LocalDate today) {
+        LocalDate baseDate = recurring.getLastRecurrenceDate() != null
+            ? recurring.getLastRecurrenceDate()
+            : recurring.getDate();
+
+        if (baseDate == null) {
+            return null;
+        }
+
+        LocalDate nextOccurrence = null;
+
+        switch (recurring.getRecurrenceFrequency()) {
+            case DAILY:
+                nextOccurrence = baseDate.plusDays(1);
+                break;
+            case WEEKLY:
+                nextOccurrence = baseDate.plusWeeks(1);
+                break;
+            case BIWEEKLY:
+                nextOccurrence = baseDate.plusWeeks(2);
+                break;
+            case MONTHLY:
+                nextOccurrence = baseDate.plusMonths(1);
+                break;
+            case QUARTERLY:
+                nextOccurrence = baseDate.plusMonths(3);
+                break;
+            case SEMI_ANNUALLY:
+                nextOccurrence = baseDate.plusMonths(6);
+                break;
+            case ANNUALLY:
+                nextOccurrence = baseDate.plusYears(1);
+                break;
+        }
+
+        return nextOccurrence;
+    }
+
+    private void createRecurringExpenseInstance(Expense recurring, LocalDate occurrenceDate) {
+        Expense newExpense = new Expense();
+        newExpense.setDescription(recurring.getDescription());
+        newExpense.setAmount(recurring.getAmount());
+        newExpense.setDate(occurrenceDate);
+        newExpense.setCategory(recurring.getCategory());
+        newExpense.setUser(recurring.getUser());
+        newExpense.setPaymentMethod(recurring.getPaymentMethod());
+        newExpense.setNotes(recurring.getNotes() + " (Auto-generated from recurring expense)");
+        newExpense.setRecurring(false); // The instance itself is not recurring
+
+        expenseRepository.save(newExpense);
     }
 }

@@ -49,6 +49,8 @@ public class Expense {
 
     private LocalDate recurrenceEndDate;
 
+    private LocalDate lastRecurrenceDate;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

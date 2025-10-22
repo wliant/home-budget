@@ -71,6 +71,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { format, startOfMonth, endOfMonth, isToday, isYesterday, subDays } from 'date-fns';
 import { useNotification } from '../contexts/NotificationContext';
+import { useAuth } from '../contexts/AuthContext';
 import axiosInstance from '../api/axiosInstance';
 
 interface Category {
@@ -96,7 +97,8 @@ const Expenses: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  
+  const { user } = useAuth();
+
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -107,7 +109,7 @@ const Expenses: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<number | 'all'>('all');
   const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('month');
-  
+
   const [formData, setFormData] = useState<Expense>({
     description: '',
     amount: 0,
@@ -119,8 +121,7 @@ const Expenses: React.FC = () => {
 
   const { showNotification } = useNotification();
 
-  // Mock user ID - in real app, get from auth context
-  const userId = 1;
+  const userId = user?.id;
 
   useEffect(() => {
     const timer = setTimeout(() => {

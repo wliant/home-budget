@@ -64,6 +64,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { format, startOfMonth, endOfMonth, addMonths } from 'date-fns';
 import { useNotification } from '../contexts/NotificationContext';
 import axiosInstance from '../api/axiosInstance';
+import { useAuth } from '../contexts/AuthContext';
 
 interface Category {
   id: number;
@@ -102,7 +103,8 @@ const Budgets: React.FC = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
-  
+  const { user } = useAuth();
+
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const [budgetStatuses, setBudgetStatuses] = useState<BudgetStatus[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -125,8 +127,7 @@ const Budgets: React.FC = () => {
 
   const { showNotification } = useNotification();
 
-  // Mock user ID - in real app, get from auth context
-  const userId = 1;
+  const userId = user?.id;
 
   useEffect(() => {
     const timer = setTimeout(() => {
