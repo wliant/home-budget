@@ -9,12 +9,20 @@ interface User {
   lastName?: string;
 }
 
+interface RegisterData {
+  username: string;
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+}
+
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
-  register: (userData: any) => Promise<void>;
+  register: (userData: RegisterData) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,7 +55,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setUser(response.data);
           // Set default axios header for authenticated requests
           axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        } catch (error) {
+        } catch {
           // Token is invalid, clear it
           localStorage.removeItem('token');
           localStorage.removeItem('user');
@@ -87,7 +95,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     delete axiosInstance.defaults.headers.common['Authorization'];
   };
 
-  const register = async (userData: any) => {
+  const register = async (userData: RegisterData) => {
     try {
       const response = await axiosInstance.post('/api/auth/register', userData);
 

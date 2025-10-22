@@ -56,7 +56,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { mode, toggleTheme } = useTheme();
   const muiTheme = useMuiTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down('sm'));
-  const isDesktop = useMediaQuery(muiTheme.breakpoints.up('md'));
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
