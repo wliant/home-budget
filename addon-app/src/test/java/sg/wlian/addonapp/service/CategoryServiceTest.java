@@ -272,8 +272,8 @@ class CategoryServiceTest {
             CategoryTreeDTO rootDto = tree.get(0);
             assertEquals(parentCategory.getId(), rootDto.getId());
             assertEquals(parentCategory.getName(), rootDto.getName());
-            assertNotNull(rootDto.getChildCategories());
-            assertEquals(2, rootDto.getChildCategories().size());
+            assertNotNull(rootDto.getChildren());
+            assertEquals(2, rootDto.getChildren().size());
             
             verify(categoryRepository, times(1)).findByUserIdAndParentCategoryIsNull(1L);
         }
@@ -311,17 +311,17 @@ class CategoryServiceTest {
             assertEquals(1, tree.size());
             
             CategoryTreeDTO rootDto = tree.get(0);
-            assertEquals(2, rootDto.getChildCategories().size());
+            assertEquals(2, rootDto.getChildren().size());
             
-            CategoryTreeDTO restaurantDto = rootDto.getChildCategories().stream()
+            CategoryTreeDTO restaurantDto = rootDto.getChildren().stream()
                     .filter(c -> c.getName().equals("Restaurants"))
                     .findFirst()
                     .orElse(null);
             
             assertNotNull(restaurantDto);
-            assertNotNull(restaurantDto.getChildCategories());
-            assertEquals(1, restaurantDto.getChildCategories().size());
-            assertEquals("Fast Food", restaurantDto.getChildCategories().get(0).getName());
+            assertNotNull(restaurantDto.getChildren());
+            assertEquals(1, restaurantDto.getChildren().size());
+            assertEquals("Fast Food", restaurantDto.getChildren().get(0).getName());
         }
     }
 

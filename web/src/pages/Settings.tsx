@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -34,7 +34,7 @@ import {
   useMediaQuery,
   alpha,
   Fade,
-  Grow,
+
   Avatar,
   Stack,
   ToggleButton,
@@ -46,7 +46,7 @@ import {
   Notifications,
   Security,
   Palette,
-  Language,
+
   AttachMoney,
   Delete,
   Edit,
@@ -58,13 +58,13 @@ import {
   VisibilityOff,
   DarkMode,
   LightMode,
-  Brightness4,
-  Settings as SettingsIcon,
+
+
 } from '@mui/icons-material';
 import { useNotification } from '../contexts/NotificationContext';
 import { useTheme as useThemeContext } from '../contexts/ThemeContext';
 import { useAuth } from '../contexts/AuthContext';
-import axiosInstance from '../api/axiosInstance';
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -125,7 +125,7 @@ interface PaymentMethod {
 
 const Settings: React.FC = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
   const { mode, toggleTheme } = useThemeContext();
   
   const [tabValue, setTabValue] = useState(0);
@@ -189,7 +189,7 @@ const Settings: React.FC = () => {
 
   const { showNotification } = useNotification();
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
   };
 
@@ -198,7 +198,7 @@ const Settings: React.FC = () => {
       // In a real app, this would make an API call
       // await axiosInstance.put(`/api/users/${userId}`, profile);
       showNotification('Profile updated successfully', 'success');
-    } catch (error) {
+    } catch {
       showNotification('Failed to update profile', 'error');
     }
   };
@@ -224,7 +224,7 @@ const Settings: React.FC = () => {
         newPassword: '',
         confirmPassword: '',
       });
-    } catch (error) {
+    } catch {
       showNotification('Failed to change password', 'error');
     }
   };
@@ -234,7 +234,7 @@ const Settings: React.FC = () => {
       // In a real app, this would make an API call
       // await axiosInstance.put(`/api/users/${userId}/notifications`, notifications);
       showNotification('Notification settings updated', 'success');
-    } catch (error) {
+    } catch {
       showNotification('Failed to update notification settings', 'error');
     }
   };
@@ -244,7 +244,7 @@ const Settings: React.FC = () => {
       // In a real app, this would make an API call
       // await axiosInstance.put(`/api/users/${userId}/settings`, appSettings);
       showNotification('App settings updated', 'success');
-    } catch (error) {
+    } catch {
       showNotification('Failed to update app settings', 'error');
     }
   };

@@ -1,6 +1,8 @@
 package sg.wlian.addonapp.entity;
 
 public enum BudgetType {
+    OVERALL("Overall"),
+    CATEGORY("Category"),
     DAILY("Daily"),
     WEEKLY("Weekly"),
     MONTHLY("Monthly"),

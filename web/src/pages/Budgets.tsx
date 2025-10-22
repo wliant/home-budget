@@ -27,8 +27,8 @@ import {
   CardContent,
   FormControlLabel,
   Switch,
-  Alert,
-  Tooltip,
+
+
   useTheme,
   useMediaQuery,
   Fade,
@@ -45,23 +45,23 @@ import {
   Add,
   Edit,
   Delete,
-  AttachMoney,
-  CalendarToday,
-  Category as CategoryIcon,
+
+
+
   Warning,
   CheckCircle,
   TrendingUp,
   TrendingDown,
   AccountBalanceWallet,
-  Timer,
-  FilterList,
+
+
   MoreVert,
   Close,
 } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { format, startOfMonth, endOfMonth, addMonths } from 'date-fns';
+import { format, startOfMonth, endOfMonth } from 'date-fns';
 import { useNotification } from '../contexts/NotificationContext';
 import axiosInstance from '../api/axiosInstance';
 import { useAuth } from '../contexts/AuthContext';

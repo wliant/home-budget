@@ -102,4 +102,46 @@ public class CategoryService {
         
         return dto;
     }
+    
+    public long countCategoriesByUser(Long userId) {
+        return categoryRepository.countByUserId(userId);
+    }
+    
+    public List<Category> getCategoriesByParent(Long parentCategoryId) {
+        return categoryRepository.findByParentCategoryId(parentCategoryId);
+    }
+    
+    public boolean hasChildren(Long categoryId) {
+        return categoryRepository.existsByParentCategoryId(categoryId);
+    }
+    
+    public void validateCategoryHierarchy(Category category) {
+        // Prevent circular references
+        if (category.getParentCategory() != null) {
+            Category parent = category.getParentCategory();
+            while (parent != null) {
+                if (parent.getId().equals(category.getId())) {
+                    throw new RuntimeException("Circular reference detected in category hierarchy");
+                }
+                parent = parent.getParentCategory();
+            }
+        }
+    }
+    
+    public List<Category> getCategoriesByUser(Long userId) {
+        return categoryRepository.findByUserId(userId);
+    }
+    
+    public java.util.Optional<Category> getCategoryById(Long id) {
+        return categoryRepository.findById(id);
+    }
+    
+    public void validateCategory(Category category) {
+        if (category.getName() == null || category.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Category name cannot be empty");
+        }
+        if (category.getUser() == null) {
+            throw new IllegalArgumentException("Category must have a user");
+        }
+    }
 }
