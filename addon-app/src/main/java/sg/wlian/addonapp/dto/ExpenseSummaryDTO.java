@@ -17,4 +17,9 @@ public class ExpenseSummaryDTO {
     private BigDecimal totalAmount;
     private int transactionCount;
     private Map<Category, BigDecimal> categoryBreakdown;
+    
+    // Backward compatibility method
+    public int getExpenseCount() {
+        return transactionCount;
+    }
 }

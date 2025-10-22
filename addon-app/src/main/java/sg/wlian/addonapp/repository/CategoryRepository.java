@@ -22,4 +22,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     
     @Query("SELECT c FROM Category c WHERE c.user.id = :userId AND c.parentCategory IS NULL AND c.isActive = true")
     List<Category> findActiveRootCategoriesByUserId(@Param("userId") Long userId);
+    
+    long countByUserId(Long userId);
+    
+    boolean existsByParentCategoryId(Long parentCategoryId);
 }

@@ -130,4 +130,10 @@ public class BudgetService {
         System.out.println("Budget Alert for " + user.getEmail() + ": " + 
                 alertType + " for budget " + status.getBudget().getName());
     }
+    
+    public void validateBudgetAmount(Budget budget) {
+        if (budget.getAmount() == null || budget.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("Budget amount must be greater than zero");
+        }
+    }
 }
